@@ -61,7 +61,7 @@
     },
     {
         "name": "OSX",
-        "type": "cppdbg",
+        "type": "lldb",
         "request": "launch",
         "program": "${workspaceRoot}/osx/hellonux",
         "args": [],

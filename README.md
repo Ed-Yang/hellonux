@@ -1,5 +1,20 @@
 # CMake cross compilation example
 
+This project demostrates a simple example of cmake cross compilation.
+
+The development target is a WiFi router with MTK SoC, but is is easy to cutomize
+it to other device, like Raspberry Pi, etc.
+
+To custimize to other device, it could create a new toolchain file like "cmake/openwrt-mtr.cmake" and fill it suitable values for:
+
+```shell
+# toolchains
+CMAKE_C_COMPILER
+CMAKE_CXX_COMPILER
+# root path
+CMAKE_FIND_ROOT_PATH
+```
+
 ## Prerequsite
 
 * CMake/GDB
@@ -21,7 +36,19 @@ make
 sudo make install
 ```
 
+* VSCode (Debian)
+
+Download .deb file and install it.
+
+```shell
+dpkg -i code_xxx.deb
+```
+
+
 ## Environment (Debian/OSX)
+
+Before building binary, it needs to modify/set the following environment variables according to
+your working environment.
 
 ```shell
 export OPENWRT_ROOT=/home/edward/workspace/official/openwrt
@@ -33,13 +60,15 @@ export TARGET=root@10.1.1.1
 
 ### Build - Debian
 
+```shell
 mkdir deb && cd deb
 cmake ..
 make
+```
 
 ### Build - OSX
 
-mkdir deb && cd deb
+mkdir osx && cd osx
 cmake ..
 make
 
@@ -66,19 +95,19 @@ In host machine:
 
 1. Use SSH to run gdbserver on target 10.1.1.1.
 
-```shell
-ssh -L9091:localhost:9091 root@10.1.1.1  gdbserver :9091 /bin/hellonux
-```
+    ```shell
+    ssh -L9091:localhost:9091 root@10.1.1.1  gdbserver :9091 /bin/hellonux
+    ```
 
 2. Launch VSCode:
 
-```shell
-code [--disable-gpu] [-n <folder>] &
+    ```shell
+    code [--disable-gpu] [-n <folder>] &
 
-ex:
+    ex:
 
-code --disable-gpu -n hellonux
-```
+    code --disable-gpu -n hellonux
+    ```
 
 If run VSCode in VM, sometimes, it will show all white screen, it can use "--disable-gpu" to make it display correctly.
 
@@ -92,10 +121,15 @@ In debug console, it can issue th GDB command with "-exec" prefix, for example:
 
 ## Usefull GDB Commands
 
+```shell
 info thread
 info shared
 set sysroot
 show arch
+b 
+n
+c
+```
 
 ## Q/A
 
@@ -106,12 +140,3 @@ show arch
 ### Manually-specified variables were not used by the project: CMAKE_TOOLCHAIN_FILE
 
 Just a warning, ignore it.
-
-
-
-    
-
-
-
-
-
