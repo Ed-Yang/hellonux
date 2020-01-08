@@ -44,17 +44,25 @@ Download .deb file and install it.
 dpkg -i code_xxx.deb
 ```
 
+* PRI ([Reference](https://stackoverflow.com/questions/19162072/how-to-install-the-raspberry-pi-cross-compiler-on-my-linux-host-machine/58559140#58559140))
 
-## Environment (Debian/OSX)
-
-Before building binary, it needs to modify/set the following environment variables according to
-your working environment.
+Setup toolchains:
 
 ```shell
-export OPENWRT_ROOT=/home/edward/workspace/official/openwrt
-export STAGING_DIR=$OPENWRT_ROOT/staging_dir/toolchain-mipsel_24kc_gcc-7.5.0_musl
-export TARGET=root@10.1.1.1
+cd /tmp
+wget https://github.com/Pro/raspi-toolchain/releases/latest/download/raspi-toolchain.tar.gz
+sudo mkdir /opt && cd /opt
+tar xvf /tmp/raspi-toolchain.tar.gz
 ```
+
+Copy rootfs:
+
+```shell
+cd ~ && mkdir -p raspberrypi/rootfs
+rsync -vR --progress -rl --delete-after --safe-links pi@192.168.1.101:/{lib,usr,opt/vc/lib} ~/raspberrypi/rootfs
+```
+
+## Environment (Debian/OSX)
 
 ## Build
 
@@ -68,11 +76,45 @@ make
 
 ### Build - OSX
 
+```shell
 mkdir osx && cd osx
 cmake ..
 make
+```
+
+### Build - RPI3 (cross compile)
+
+Before building binary, it needs to modify/set the following environment variables according to
+your working environment.
+
+```shell
+export TARGET=pi@192.168.1.101
+
+export RPI3_C=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc
+export RPI3_CXX=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++
+export RPI3_ROOTFS=$HOME/raspberrypi/rootfs
+```
+
+```shell
+mkdir rpi && cd rpi
+cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/rpi3.cmake ..
+make
+```
 
 ### Build - Openwrt MTK (cross compile)
+
+Before building binary, it needs to modify/set the following environment variables according to
+your working environment.
+
+```shell
+export OPENWRT_ROOT=$HOME/workspace/official/openwrt
+export STAGING_DIR=$OPENWRT_ROOT/staging_dir/toolchain-mipsel_24kc_gcc-7.5.0_musl
+export TARGET=root@10.1.1.1
+
+export MTK_C=$OPENWRT_ROOT/staging_dir/toolchain-mipsel_24kc_gcc-7.5.0_musl/bin/mipsel-openwrt-linux-musl-gcc
+export MTK_CXX=$OPENWRT_ROOT/staging_dir/toolchain-mipsel_24kc_gcc-7.5.0_musl/bin/mipsel-openwrt-linux-musl-g++
+export MTK_ROOTFS=$OPENWRT_ROOT/staging_dir/target-mipsel_24kc_musl/
+```
 
 ```shell
 mkdir wrt && cd wrt
@@ -87,16 +129,24 @@ In openwrt project folder, run "make menuconfig" and check the "Utilities/hellon
 make package/hellonux/compile V=s
 ```
 
-## Remote Debugging
-
-### Openwrt MTK
+## Remote VSCode Debugging
 
 In host machine:
 
-1. Use SSH to run gdbserver on target 10.1.1.1.
+1. Setup SSH to run gdbserver on target $TARGET.
+
+    RPI:
 
     ```shell
-    ssh -L9091:localhost:9091 root@10.1.1.1  gdbserver :9091 /bin/hellonux
+    ssh -L9091:localhost:9091 $TARGET "gdbserver :9091 ~pi/bin/hellonux"
+    ```
+
+    or
+
+    OpenWrt:
+
+    ```shell
+    ssh -L9091:localhost:9091 $TARGET "gdbserver :9091 /bin/hellonux"
     ```
 
 2. Launch VSCode:
@@ -117,16 +167,16 @@ In debug console, it can issue th GDB command with "-exec" prefix, for example:
 -exec info thread
 ```
 
-3. Select "OpenWrt" debug configuration and start debugging.
+3. Select "RPI3" or "MTK" debug configuration and start debugging.
 
-## Usefull GDB Commands
+## Remote GDB Debugging
 
 ```shell
 info thread
 info shared
 set sysroot
 show arch
-b 
+b
 n
 c
 ```

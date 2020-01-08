@@ -55,7 +55,7 @@ IF (DEFINED CMAKE_TOOLCHAIN_FILE)
     add_custom_command(TARGET hellonux
         # Run after all other rules within the target have been executed
         POST_BUILD
-        COMMAND scp hellonux ${TARGET}:/bin
+        COMMAND scp hellonux ${TARGET}:$HOME/bin
         COMMENT "This command will be executed after building hellonux"
         VERBATIM
     )
