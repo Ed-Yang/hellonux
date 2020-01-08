@@ -1,0 +1,75 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "Debian",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/deb/hellonux",
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "OpenWrt",
+        "type": "cppdbg",
+        "request": "launch",
+        //"program": "${workspaceRoot}/build/helloworld",
+        "program": "${workspaceRoot}/wrt/hellonux",
+        "miDebuggerServerAddress": ":9091",
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceRoot}",
+        "environment": [],
+        "externalConsole": false,
+        // without preLaunchTask, on HOST run: ssh -L9091:localhost:9091 pi@rpi3  gdbserver :9091 ~/program/hello
+        //"preLaunchTask": "gdbserver",
+        "serverStarted": "Listening on port",
+        "filterStderr": true,
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "enable-pretty-printing",
+                "ignoreFailures": true,
+            },
+            {"text": "set startup-with-shell off"},
+            //{"text": "set gnutarget elf32-littlearm"},
+            //{"text": "b main"},
+        ],
+        //"logging": { "engineLogging": true, "trace": true, "traceResponse": true },
+        "linux": {
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            },
+            "osx": {
+            "sourceFileMap": {
+                // "remote": "local"
+                "/home/edward/workspace/official/openwrt/package/helloworld": "${workspaceFolder}"
+            },
+            "MIMode": "gdb"
+            },
+            "windows": {
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
+            }
+    },
+    {
+        "name": "OSX",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/osx/hellonux",
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb"
+    },
+    ]
+}
