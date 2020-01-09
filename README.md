@@ -88,7 +88,7 @@ Before building binary, it needs to modify/set the following environment variabl
 your working environment.
 
 ```shell
-export TARGET=pi@192.168.1.101
+export TARGET=root@192.168.1.101
 
 export RPI3_C=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc
 export RPI3_CXX=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++
@@ -96,7 +96,7 @@ export RPI3_ROOTFS=$HOME/raspberrypi/rootfs
 ```
 
 ```shell
-mkdir rpi && cd rpi
+mkdir -p rpi && cd rpi
 cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/rpi3.cmake ..
 make
 ```
@@ -199,3 +199,13 @@ Try to remove all files in build folder and rebuild it.
 
 Check the output binary file format with "file" command.  Setup the correct environment variables, take MTK as
 example, it should set 'MTK_C', 'MTK_CXX', 'MTK_ROOTFS' correctly.
+
+### Unable to stat debugging....File format is ambiguous.
+
+Set the target architecture in GDB setupCommands section:
+
+Ex.  For RPI3:
+
+```shell
+{"text": "set gnutarget elf32-littlearm"},
+```

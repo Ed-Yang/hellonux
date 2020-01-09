@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
     {
-        "name": "OSX",
+        "name": "OSX (lldb)",
         "type": "lldb",
         "request": "launch",
         "program": "${workspaceRoot}/osx/hellonux",
@@ -17,7 +17,7 @@
         "MIMode": "lldb"
     },
     {
-        "name": "Debian",
+        "name": "Linux (gdb)",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceRoot}/deb/hellonux",
@@ -29,7 +29,7 @@
         "MIMode": "gdb"
     },
     {
-        "name": "RPI3",
+        "name": "RPI3 (gdbserver)",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceRoot}/rpi/hellonux",
@@ -39,7 +39,7 @@
         "cwd": "${workspaceRoot}",
         "environment": [],
         "externalConsole": false,
-        // without preLaunchTask, on HOST run: ssh -L9091:localhost:9091 pi@192.168.1.101  "gdbserver :9091 ~pi/bin/hellonux"
+        // without preLaunchTask, on HOST run: ssh -L9091:localhost:9091 root@192.168.1.101 "gdbserver :9091 /usr/sbin/hellonux"
         //"preLaunchTask": "gdbserver",
         "serverStarted": "Listening on port",
         "filterStderr": true,
@@ -50,52 +50,9 @@
                 "ignoreFailures": true,
             },
             {"text": "set startup-with-shell off"},
-            //{"text": "set gnutarget elf32-littlearm"},
+            {"text": "set gnutarget elf32-littlearm"},
             //{"text": "b main"},
         ],
-        //"logging": { "engineLogging": true, "trace": true, "traceResponse": true },
-        "linux": {
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb-multiarch",
-            },
-        "osx": {
-            "sourceFileMap": {
-                // "remote": "local"
-                "/home/edward/workspace/official/openwrt/package/hellonux": "${workspaceFolder}"
-            },
-            "MIMode": "gdb"
-            },
-            "windows": {
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
-            }
-    },
-    {
-        "name": "MTK",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceRoot}/wrt/hellonux",
-        "miDebuggerServerAddress": ":9091",
-        "args": [],
-        "stopAtEntry": true,
-        "cwd": "${workspaceRoot}",
-        "environment": [],
-        "externalConsole": false,
-        // without preLaunchTask, on HOST run: ssh -L9091:localhost:9091 root@10.1.1.1 "gdbserver :9091 /bin/hellonux"
-        //"preLaunchTask": "gdbserver",
-        "serverStarted": "Listening on port",
-        "filterStderr": true,
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing for gdb",
-                "text": "enable-pretty-printing",
-                "ignoreFailures": true,
-            },
-            {"text": "set startup-with-shell off"},
-            //{"text": "set gnutarget elf32-littlearm"},
-            //{"text": "b main"},
-        ],
-        //"logging": { "engineLogging": true, "trace": true, "traceResponse": true },
         "linux": {
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb-multiarch",
@@ -111,6 +68,100 @@
             "MIMode": "gdb",
             "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
         }
+        //"logging": { "engineLogging": true, "trace": true, "traceResponse": true },
+    },
+    {
+        "name": "MTK (gdbserver)",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/wrt/hellonux",
+        "miDebuggerServerAddress": ":9091",
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceRoot}",
+        "environment": [],
+        "externalConsole": false,
+        // without preLaunchTask, on HOST run: ssh -L9091:localhost:9091 root@10.1.1.1 "gdbserver :9091 /usr/sbin/hellonux"
+        //"preLaunchTask": "gdbserver",
+        "serverStarted": "Listening on port",
+        "filterStderr": true,
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "enable-pretty-printing",
+                "ignoreFailures": true,
+            },
+            {"text": "set startup-with-shell off"},
+            //{"text": "set gnutarget elf32-littlearm"},
+            //{"text": "b main"},
+        ],
+        "linux": {
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+        },
+        "osx": {
+            "sourceFileMap": {
+                // "remote": "local"
+                "/home/edward/workspace/official/openwrt/package/hellonux": "${workspaceFolder}"
+            },
+            "MIMode": "gdb"
+        },
+        "windows": {
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
+        }
+        //"logging": { "engineLogging": true, "trace": true, "traceResponse": true },
+    },
+    {
+        "name": "RPI3 (gdbserver, no message)",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/rpi/hellonux",
+        "miDebuggerServerAddress": ":9091",
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceRoot}",
+        "environment": [],
+        "externalConsole": false,
+        "pipeTransport": {
+            "pipeCwd": "${workspaceRoot}",
+            "pipeProgram": "bash",
+            "pipeArgs": ["-c"],
+            "debuggerPath": "gdb",
+            //"debuggerPath": "gstdbuf -i0 -o0 -e0 gdb",
+        }, 
+        "filterStderr": true,
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "enable-pretty-printing",
+                "ignoreFailures": true,
+            },
+            {"text": "set startup-with-shell off"},
+            {"text": "set gnutarget elf32-littlearm"},
+            {"text": "b main"},
+            {
+                "description": "Start remote debugging",
+                "text": "target remote | ssh root@192.168.1.101 gdbserver - /usr/sbin/hellonux",
+                "ignoreFailures": false
+            }
+        ],
+        "linux": {
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+        },
+        "osx": {
+            "sourceFileMap": {
+                // "remote": "local"
+                "/home/edward/workspace/official/openwrt/package/hellonux": "${workspaceFolder}"
+            },
+            "MIMode": "gdb"
+        },
+        "windows": {
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
+        }
+        //"logging": {"engineLogging": true, "trace": true, "traceResponse": true, "programOutput": true},
     },
     ]
 }
