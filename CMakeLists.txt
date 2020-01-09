@@ -7,7 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 SET(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-SET(TARGET $ENV{TARGET})
+SET(GDBTARGET $ENV{TARGET})
 
 
 # only perform gtest on host env
@@ -49,14 +49,13 @@ IF ("${CMAKE_TOOLCHAIN_FILE}" STREQUAL "")
     target_link_libraries(gt_sysver sysver ${GTEST_BOTH_LIBRARIES})
 ENDIF()
 
-MESSAGE("---->" ${CMAKE_TOOLCHAIN_FILE})
-
 IF (DEFINED CMAKE_TOOLCHAIN_FILE)
+    MESSAGE("After built, will copy binary to " "${GDBTARGET}:/usr/sbin")
     add_custom_command(TARGET hellonux
         # Run after all other rules within the target have been executed
         POST_BUILD
-        COMMAND scp hellonux ${TARGET}:$HOME/bin
-        COMMENT "This command will be executed after building hellonux"
+        COMMENT "copy hellonux to target ..."
+        COMMAND scp hellonux ${GDBTARGET}:/usr/sbin
         VERBATIM
     )
 ENDIF()

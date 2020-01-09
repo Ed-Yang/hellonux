@@ -58,10 +58,10 @@
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb-multiarch",
             },
-            "osx": {
+        "osx": {
             "sourceFileMap": {
                 // "remote": "local"
-                "/home/edward/workspace/official/openwrt/package/helloworld": "${workspaceFolder}"
+                "/home/edward/workspace/official/openwrt/package/hellonux": "${workspaceFolder}"
             },
             "MIMode": "gdb"
             },
@@ -99,18 +99,18 @@
         "linux": {
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb-multiarch",
-            },
-            "osx": {
+        },
+        "osx": {
             "sourceFileMap": {
                 // "remote": "local"
-                "/home/edward/workspace/official/openwrt/package/helloworld": "${workspaceFolder}"
+                "/home/edward/workspace/official/openwrt/package/hellonux": "${workspaceFolder}"
             },
             "MIMode": "gdb"
-            },
-            "windows": {
+        },
+        "windows": {
             "MIMode": "gdb",
             "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
-            }
+        }
     },
     ]
 }

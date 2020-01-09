@@ -146,7 +146,7 @@ In host machine:
     OpenWrt:
 
     ```shell
-    ssh -L9091:localhost:9091 $TARGET "gdbserver :9091 /bin/hellonux"
+    ssh -L9091:localhost:9091 $TARGET "gdbserver :9091 /usr/sbin/hellonux"
     ```
 
 2. Launch VSCode:
@@ -190,3 +190,12 @@ c
 ### Manually-specified variables were not used by the project: CMAKE_TOOLCHAIN_FILE
 
 Just a warning, ignore it.
+
+### Cannot stop on program entry point
+
+Try to remove all files in build folder and rebuild it.
+
+### Reply contains invalid hex digit 59
+
+Check the output binary file format with "file" command.  Setup the correct environment variables, take MTK as
+example, it should set 'MTK_C', 'MTK_CXX', 'MTK_ROOTFS' correctly.
